@@ -1,0 +1,423 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: "LWLC Proj 2024"
+  description: "LWLC Proj 2024"
+host: "localhost:3000"
+paths:
+  /products:
+    get:
+      tags:
+        - "Products"
+      summary: "Return inventory."
+      description: "Returns a list of available products. It can also be filtered by individual ID by adding it to the path!"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "header"
+          name: "authorization"
+          required: true
+          type: "string"
+          description: "Authorization: 'wkakjbadue4.t3gfddvdsgh46.y45j5yrhedtg' (DO NOT use the 'bearer' keyword)"
+      responses:
+        200:
+          description: "Returns a JSON with the list"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/product"
+    post:
+      tags:
+        - "Products"
+      summary: "Add a new product"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "header"
+          name: "authorization"
+          required: true
+          type: "string"
+          description: "Authorization: 'wkakjbadue4.t3gfddvdsgh46.y45j5yrhedtg' (DO NOT use the 'bearer' keyword)"
+        - in: "body"
+          name: "body"
+          description: "Product to be added"
+          required: true
+          schema:
+            $ref: "#/definitions/load_product"
+      responses:
+        200:
+          description: "Product created!"
+          schema:
+            type: "object"
+            properties:
+              product_id:
+                type: "number"
+                example: 2
+              name:
+                type: "string"
+                example: "Pizza"
+              price:
+                type: "number"
+                example: 132
+              photo_link:
+                type: "string"
+                example: placeholder.link/example
+        400:
+          description: "Error in request! The required fields are name, price, and photo_link!"
+  /products/{id}:
+    put:
+      tags:
+        - "Products"
+      summary: "Update a product"
+      description: "Update product data. ONLY ONE DATA CAN BE CHANGED AT A TIME!!!"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Product ID"
+          required: true
+          type: "integer"
+          format: "int64"
+        - in: "header"
+          name: "authorization"
+          description: "Authorization: 'wkakjbadue4.t3gfddvdsgh46.y45j5yrhedtg' (DO NOT use the 'bearer' keyword)"
+          required: true
+          type: "string"
+        - in: "body"
+          name: "body"
+          description: "Product to be added"
+          required: true
+          schema:
+            $ref: "#/definitions/load_product"
+      responses:
+        202:
+          description: "Success!"
+          schema:
+            $ref: "#/definitions/product"
+        404:
+          description: "No data found to update"
+    delete:
+      tags:
+        - "Products"
+      summary: "Delete a product"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Product ID"
+          required: true
+          type: "integer"
+          format: "int64"
+        - in: "header"
+          name: "authorization"
+          description: "Authorization: 'wkakjbadue4.t3gfddvdsgh46.y45j5yrhedtg' (DO NOT use the 'bearer' keyword)"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Deleted!"
+        404:
+          description: "Product not found!"
+  /orders:
+    get:
+      tags:
+        - "Orders"
+      summary: "Return orders list"
+      description: "Returns a list of all logged orders"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "header"
+          name: "authorization"
+          description: "Authorization: 'wkakjbadue4.t3gfddvdsgh46.y45j5yrhedtg' (DO NOT use the 'bearer' keyword)"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Success!"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/orders"
+    post:
+      tags:
+        - "Orders"
+      summary: "Add a new order"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "header"
+          name: "authorization"
+          required: true
+          type: "string"
+          description: "Authorization: 'wkakjbadue4.t3gfddvdsgh46.y45j5yrhedtg' (DO NOT use the 'bearer' keyword)"
+        - in: "body"
+          name: "body"
+          description: "Product to be added"
+          required: true
+          schema:
+            $ref: "#/definitions/loaded_order"
+      responses:
+        200:
+          description: "Success!"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/orders"
+  /orders/{id}:
+    put:
+      tags:
+        - "Orders"
+      summary: "Update order status"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "id"
+          description: "Order ID"
+          required: true
+          type: "integer"
+          format: "int64"
+        - in: "header"
+          name: "authorization"
+          description: "Authorization: 'wkakjbadue4.t3gfddvdsgh46.y45j5yrhedtg' (DO NOT use the 'bearer' keyword)"
+          required: true
+          type: "string"
+        - in: "body"
+          name: "body"
+          description: "Item to edit"
+          required: true
+          schema:
+            $ref: "#/definitions/updateState"
+      responses:
+        202:
+          description: "Accepted"
+          schema:
+            $ref: "#/definitions/orders"
+    delete:
+      tags:
+        - "Orders"
+      summary: "Delete an order"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "id"
+          description: "Order ID"
+          required: true
+          type: "integer"
+          format: "int64"
+        - in: "header"
+          name: "authorization"
+          description: "Authorization: 'wkakjbadue4.t3gfddvdsgh46.y45j5yrhedtg' (DO NOT use the 'bearer' keyword)"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Success!"
+  /users:
+    get:
+      tags:
+        - "Users"
+      summary: "Return users list"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "header"
+          name: "authorization"
+          description: "Authorization: 'wkakjbadue4.t3gfddvdsgh46.y45j5yrhedtg' (DO NOT use the 'bearer' keyword)"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Success!"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/registered_user"
+    post:
+      tags:
+        - "Users"
+      summary: "Create user"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "header"
+          name: "authorization"
+          required: true
+          type: "string"
+          description: "Authorization: 'wkakjbadue4.t3gfddvdsgh46.y45j5yrhedtg' (DO NOT use the 'bearer' keyword)"
+        - in: "body"
+          name: "body"
+          description: "User data"
+          required: true
+          schema:
+            $ref: "#/definitions/registered_user"
+      responses:
+        201:
+          description: "User created!"
+          schema:
+            $ref: "#/definitions/user_id"
+  /users/login:
+    post:
+      tags:
+        - "Users"
+      summary: "Log in to the store"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "header"
+          name: "authorization"
+          required: true
+          type: "string"
+          description: "Authorization: 'wkakjbadue4.t3gfddvdsgh46.y45j5yrhedtg' (DO NOT use the 'bearer' keyword)"
+        - name: "credentials"
+          in: "body"
+          description: "The username and password"
+          required: true
+          schema:
+            type: "object"
+            properties:
+              username:
+                type: "string"
+              password:
+                type: "string"
+      responses:
+        200:
+          description: "Success!"
+          schema:
+            type: "string"
+            example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiU2ViYXNOYXRhbGUiLCJhZG1pbiI6InRydWUiLCJpYXQiOjE1OTI5NDY2MTksImV4cCI6MTU5Mjk1MDIxOX0.tk7L95BPig2Sdo9Hds_EbQQeOP1rgANlzDnTVC8AwDQ"
+definitions:
+  orders:
+    type: "object"
+    properties:
+      order_id:
+        type: "number"
+        example: 3
+      description:
+        type: "string"
+        example: "1x Burger"
+      price:
+        type: "integer"
+        example: 312
+      payment_method:
+        type: "string"
+        example: "cash"
+      nameUser:
+        type: "string"
+        example: "user123"
+      address:
+        type: "string"
+        example: "123 Fake St"
+      products:
+        type: "array"
+        items:
+          type: "object"
+          properties:
+            product_id:
+              type: "number"
+              example: 2
+            quantityProduct:
+              type: "integer"
+              example: 1
+            name:
+              type: "string"
+              example: "Pizza"
+            price:
+              type: "integer"
+              example: 142
+  loaded_order:
+    type: "object"
+    properties:
+      products:
+        type: "array"
+        items:
+          type: "object"
+          properties:
+            product_id:
+              type: "number"
+              example: 3
+            quantity:
+              type: "integer"
+              example: 1
+      price:
+        type: "integer"
+        example: 324
+      payment_method:
+        type: "string"
+        example: "cash"
+  registered_user:
+    type: "object"
+    properties:
+      username:
+        type: "string"
+      full_name:
+        type: "string"
+      email:
+        type: "string"
+      phone_number:
+        type: "number"
+        example: 2225555 (phone must be unique for each user)
+      address:
+        type: "string"
+      password:
+        type: "string"
+      is_admin:
+        type: "string"
+        example: "true"
+  user_id:
+    type: "object"
+    properties:
+      user_id:
+        type: "number"
+        example: 2
+  updateState:
+    type: "object"
+    properties:
+      state:
+        type: "string"
+        description: "Order state"
+        enum:
+          - "new"
+          - "confirmed"
+          - "preparing"
+          - "on delivery"
+          - "delivered"
+  product:
+    type: "object"
+    properties:
+      product_id:
+        type: "integer"
+        example: "15"
+      name:
+        type: "string"
+        example: "Pizza"
+      price:
+        type: "number"
+        example: 365
+      photo_link:
+        type: "string"
+        example: "placeholder.link/example"
+  load_product:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        example: "Pizza"
+      price:
+        type: "integer"
+        example: 253
+      photo_link:
+        type: "string"
+        example: "placeholder.link/example"
