@@ -9,8 +9,8 @@ const server = express();
 //server.use(cors());
 server.use(parser.json());
 server.listen(3000, () => console.log("Server started"));
-const sql = new sequelize("mysql://root:@localhost:3306/LWLC_proj_2024");
-//const sql = new sequelize("mysql://sql11688919:ydHKTn5B8j@sql11.freemysqlhosting.net:3306/sql11688919");
+//const sql = new sequelize("mysql://root:@localhost:3306/LWLC_proj_2024");
+const sql = new sequelize("mysql://sql11688919:ydHKTn5B8j@sql11.freemysqlhosting.net:3306/sql11688919");
 sql.authenticate().then(() => console.log("DB connected"));
 
 //--------------------------------------------------------- MIDDLEWARES
