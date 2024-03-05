@@ -10,27 +10,28 @@ const server = express();
 server.use(parser.json());
 server.listen(3000, () => console.log("Server started"));
 const sql = new sequelize("mysql://root:@localhost:3306/LWLC_proj_2024");
+//const sql = new sequelize("mysql://sql11688919:ydHKTn5B8j@sql11.freemysqlhosting.net:3306/sql11688919");
 sql.authenticate().then(() => console.log("DB connected"));
 
 //--------------------------------------------------------- MIDDLEWARES
 
 // Middleware to authenticate administrator roles
 function adminAuth(req, res, next) {
-    /*const token = req.headers.authorization;
+    const token = req.headers.authorization;
     if (!token) {
         return res.status(400).send("Authorization token not detected!");
     }
     try {
         const decodedToken = jwt.verify(token, key);
         const isAdmin = decodedToken.admin;
-        if (isAdmin !== true) {
+        console.log(decodedToken)
+        if (isAdmin !== 'true') {
             return res.status(403).send("You don't have administrator privileges!");
         }
         next();
     } catch (error) {
         return res.status(401).send("Invalid token!");
-    }*/
-    next();
+    }
 }
 
 // Function to retrieve product details for a given order ID
@@ -210,8 +211,9 @@ server.post("/users/login", async function(req, res) {
             return res.status(401).send("Incorrect credentials!");
         }
 
-        const isAdmin = user[0].admin;
+        const isAdmin = user[0].is_admin;
         const token = jwt.sign({ username: username, admin: isAdmin }, key, { expiresIn: "60m" });
+        console.log(isAdmin)
 
         res.status(200).send("User authenticated! Token: " + token);
     } catch(error) {
