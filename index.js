@@ -4,6 +4,10 @@ const parser = require("body-parser");
 const sequelize = require("sequelize");
 const jwt = require("jsonwebtoken");
 const key = require("./shh");
+/* Swagger */
+const swaggerUi = require("swagger-ui-express");
+const YAML = require("yamljs");
+const swaggerDocument = YAML.load('./spec.yaml');
 
 const server = express();
 //server.use(cors());
@@ -13,6 +17,7 @@ server.listen(port, () => console.log("Server started"));
 const sql = new sequelize("mysql://root:@localhost:3306/LWLC_proj_2024");
 //const sql = new sequelize("mysql://sql11688919:ydHKTn5B8j@sql11.freemysqlhosting.net:3306/sql11688919");
 sql.authenticate().then(() => console.log("DB connected"));
+server.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 //--------------------------------------------------------- MIDDLEWARES
 
@@ -247,7 +252,7 @@ server.post("/orders", async function(req, res) {
         const token = req.headers.authorization;
         const verify = jwt.verify(token, key);
         const user = verify.username;
-        const { products, price, paymentMethod } = req.body;
+        const { products, price, payment_method } = req.body;
 
         // Fetch user data
         const [userData] = await sql.query(`SELECT * FROM users WHERE username = "${user}"`);
@@ -265,15 +270,15 @@ server.post("/orders", async function(req, res) {
 
         // Insert order into database
         const [orderId] = await sql.query(`
-            INSERT INTO orders(user_id, time, description, total_price, payment_method)
-            VALUES ("${userData[0].user_id}", "${new Date().toLocaleTimeString()}", "${description.join(", ")}", "${price}", "${paymentMethod}")
+            INSERT INTO orders(user_id, date_time, description, total_price, payment_method)
+            VALUES ("${userData[0].user_id}", "${new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '')}", "${description.join(", ")}", "${price}", "${payment_method}")
         `);
 
         // Insert order items into database
         for (const product of products) {
             await sql.query(`
                 INSERT INTO orders_products(order_id, product_id, product_quantity, payment_method)
-                VALUES ("${orderId}", "${product.product_id}", "${product.quantity}", "${paymentMethod}")
+                VALUES ("${orderId}", "${product.product_id}", "${product.quantity}", "${payment_method}")
             `);
         }
 
@@ -296,6 +301,7 @@ server.post("/orders", async function(req, res) {
         response[0].products = productsData;
         res.status(201).json(response[0]);
     } catch(error) {
+        console.log(error)
         res.status(401).send("Token not found or expired. Please log in to continue!");
     }
 });

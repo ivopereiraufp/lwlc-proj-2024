@@ -198,7 +198,7 @@ paths:
           description: "Item to edit"
           required: true
           schema:
-            $ref: "#/definitions/updateState"
+            $ref: "#/definitions/updateStatus"
       responses:
         202:
           description: "Accepted"
@@ -382,12 +382,12 @@ definitions:
       user_id:
         type: "number"
         example: 2
-  updateState:
+  updateStatus:
     type: "object"
     properties:
-      state:
+      status:
         type: "string"
-        description: "Order state"
+        description: "Order status"
         enum:
           - "pending"
           - "processing"

@@ -18,7 +18,7 @@ VALUES
 ('Wireless Mouse', 59, 'https://example.com/mouse.jpg');
 
 -- Insert random orders
-INSERT INTO orders (user_id, status, time, description, total_price, payment_method)
+INSERT INTO orders (user_id, status, date_time, description, total_price, payment_method)
 VALUES
 (1, 'pending', '2024-02-28 09:00:00', '1x Smartphone, 2x Headphones', 1197, 'credit card'),
 (2, 'pending', '2024-02-28 10:30:00', '1x Laptop', 1999, 'paypal'),

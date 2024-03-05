@@ -20,8 +20,8 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS orders (
     order_id INT PRIMARY KEY AUTO_INCREMENT,
     user_id INT,
-    status VARCHAR(255) NOT NULL,
-    time VARCHAR(255) NOT NULL,
+    status VARCHAR(255) NOT NULL DEFAULT 'pending',
+    date_time VARCHAR(255) NOT NULL,
     description VARCHAR(255) NOT NULL,
     total_price INT UNSIGNED NOT NULL,
     payment_method VARCHAR(50) NOT NULL,
