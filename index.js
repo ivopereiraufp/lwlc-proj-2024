@@ -25,7 +25,6 @@ function adminAuth(req, res, next) {
     try {
         const decodedToken = jwt.verify(token, key);
         const isAdmin = decodedToken.admin;
-        console.log(decodedToken)
         if (isAdmin !== 'true') {
             return res.status(403).send("You don't have administrator privileges!");
         }
@@ -214,7 +213,6 @@ server.post("/users/login", async function(req, res) {
 
         const isAdmin = user[0].is_admin;
         const token = jwt.sign({ username: username, admin: isAdmin }, key, { expiresIn: "60m" });
-        console.log(isAdmin)
 
         res.status(200).send("User authenticated! Token: " + token);
     } catch(error) {
