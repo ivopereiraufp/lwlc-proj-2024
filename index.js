@@ -7,15 +7,18 @@ const key = require("./shh");
 /* Swagger */
 const swaggerUi = require("swagger-ui-express");
 const YAML = require("yamljs");
+const dotenv = require('dotenv').config();
 const swaggerDocument = YAML.load('./spec.yaml');
 
 const server = express();
 //server.use(cors());
 server.use(parser.json());
 const port = process.env.PORT || 3000;
-server.listen(port, () => console.log("Server started"));
-const sql = new sequelize("mysql://root:@localhost:3306/LWLC_proj_2024");
-//const sql = new sequelize("mysql://sql11688919:ydHKTn5B8j@sql11.freemysqlhosting.net:3306/sql11688919");
+server.listen(port, () => console.log(`Server started: ${process.env.NODE_ENV}`));
+const sql = (process.env.NODE_ENV==="production")?
+    new sequelize(`mysql://${process.env.DB_USER_PROD}:${process.env.DB_PWD_PROD}@${process.env.DB_SERVER_PROD}:${process.env.DB_PORT_PROD}/${process.env.DB_DB_PROD}`)
+    :new sequelize(`mysql://${process.env.DB_USER}:${process.env.DB_PWD}@${process.env.DB_SERVER}:${process.env.DB_PORT}/${process.env.DB_DB}`);
+
 sql.authenticate().then(() => console.log("DB connected"));
 server.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
