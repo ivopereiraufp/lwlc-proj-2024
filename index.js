@@ -13,7 +13,7 @@ const swaggerDocument = YAML.load('./spec.yaml');
 const server = express();
 //server.use(cors());
 server.use(parser.json());
-const port = process.env.PORT || 3000;
+const port = process.env.NODE_DOCKER_PORT || process.env.PORT || 3000;
 server.listen(port, () => console.log(`Server started: ${process.env.NODE_ENV}`));
 const sql = (process.env.NODE_ENV==="production")?
     new sequelize(`mysql://${process.env.DB_USER_PROD}:${process.env.DB_PWD_PROD}@${process.env.DB_SERVER_PROD}:${process.env.DB_PORT_PROD}/${process.env.DB_DB_PROD}`)
