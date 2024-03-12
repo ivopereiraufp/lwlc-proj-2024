@@ -2,7 +2,7 @@
   "name": "lwlc-proj-2024",
   "version": "1.0.0",
   "description": "lwlc-proj-2024",
-  "license": "License",
+  "license": "AFL-3.0",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
