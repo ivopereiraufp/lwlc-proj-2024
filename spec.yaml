@@ -3,7 +3,7 @@ info:
   version: 1.0.0
   title: "LWLC Proj 2024"
   description: "LWLC Proj 2024"
-host: "https://lwlc-proj-2024.onrender.com"
+host: "lwlc-proj-2024.onrender.com"
 paths:
   /products:
     get:
