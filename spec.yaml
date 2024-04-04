@@ -251,11 +251,6 @@ paths:
       produces:
         - "application/json"
       parameters:
-        - in: "header"
-          name: "authorization"
-          required: true
-          type: "string"
-          description: "Authorization: 'wkakjbadue4.t3gfddvdsgh46.y45j5yrhedtg' (DO NOT use the 'bearer' keyword)"
         - in: "body"
           name: "body"
           description: "User data"
