@@ -223,7 +223,7 @@ server.post("/users/login", async function(req, res) {
         const token = jwt.sign({ username: username, admin: isAdmin }, key, { expiresIn: "60m" });
 
         //res.status(200).send("User authenticated! Token: " + token);
-        res.status(200).send(token);
+        res.status(200).send(JSON.stringify(token));
     } catch(error) {
         res.status(500).send("Internal Server Error! Something went wrong while processing your request.");
     }
