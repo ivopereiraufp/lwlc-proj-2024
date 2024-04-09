@@ -1,6 +1,6 @@
 const express = require("express");
 const parser = require("body-parser");
-//const cors = require("cors");
+const cors = require("cors");
 const sequelize = require("sequelize");
 const jwt = require("jsonwebtoken");
 const key = require("./shh");
@@ -11,7 +11,7 @@ const dotenv = require('dotenv').config();
 const swaggerDocument = YAML.load('./spec.yaml');
 
 const server = express();
-//server.use(cors());
+server.use(cors());
 server.use(parser.json());
 const port = process.env.NODE_DOCKER_PORT || process.env.PORT || 3000;
 server.listen(port, () => console.log(`Server started: ${process.env.NODE_ENV}`));
