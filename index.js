@@ -269,7 +269,8 @@ server.put("/users/:id", userAuth, async function (req, res) {
     if (phone_number) updatedFields.phone_number = phone_number;
     if (address) updatedFields.address = address;
     if (password) updatedFields.password = password;
-    if (is_admin) updatedFields.is_admin = is_admin;
+    if (req.user.admin === "true" && is_admin)
+      updatedFields.is_admin = is_admin;
 
     const updateQuery = Object.entries(updatedFields)
       .map(([key, value]) => `${key} = "${value}"`)
