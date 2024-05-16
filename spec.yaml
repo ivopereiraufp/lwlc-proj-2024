@@ -62,7 +62,7 @@ paths:
                 example: 132
               photo_link:
                 type: "string"
-                example: placeholder.link/example
+                example: "placeholder.link/example"
         400:
           description: "Error in request! The required fields are name, price, and photo_link!"
   /products/{id}:
@@ -287,6 +287,47 @@ paths:
           schema:
             type: "string"
             example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiU2ViYXNOYXRhbGUiLCJhZG1pbiI6InRydWUiLCJpYXQiOjE1OTI5NDY2MTksImV4cCI6MTU5Mjk1MDIxOX0.tk7L95BPig2Sdo9Hds_EbQQeOP1rgANlzDnTVC8AwDQ"
+  /users/{id}:
+    put:
+      tags:
+        - "Users"
+      summary: "Update user profile"
+      description: "Update user data. Multiple fields can be updated at once."
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "User ID"
+          required: true
+          type: "integer"
+          format: "int64"
+        - in: "header"
+          name: "authorization"
+          description: "Authorization: 'wkakjbadue4.t3gfddvdsgh46.y45j5yrhedtg' (DO NOT use the 'bearer' keyword)"
+          required: true
+          type: "string"
+        - in: "body"
+          name: "body"
+          description: "User data to be updated"
+          required: true
+          schema:
+            $ref: "#/definitions/registered_user"
+      responses:
+        200:
+          description: "User profile updated successfully!"
+          schema:
+            $ref: "#/definitions/registered_user"
+      400:
+        description: "Invalid request parameters!"
+      403:
+        description: "Permission denied!"
+      404:
+        description: "User not found!"
+      500:
+        description: "Internal Server Error!"
 definitions:
   orders:
     type: "object"
@@ -357,7 +398,7 @@ definitions:
         type: "string"
       phone_number:
         type: "number"
-        example: 2225555 (phone must be unique for each user)
+        example: 2225555
       address:
         type: "string"
       password:
