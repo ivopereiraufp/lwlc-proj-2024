@@ -497,6 +497,9 @@ server.put("/orders/:id", adminAuth, async function (req, res) {
 // Delete an order
 server.delete("/orders/:id", adminAuth, async function (req, res) {
   try {
+    await sql.query(
+        `DELETE FROM orders_products WHERE order_id = "${req.params.id}"`
+    );
     const result = await sql.query(
       `DELETE FROM orders WHERE order_id = "${req.params.id}"`
     );
