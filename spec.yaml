@@ -288,6 +288,29 @@ paths:
             type: "string"
             example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjoiU2ViYXNOYXRhbGUiLCJhZG1pbiI6InRydWUiLCJpYXQiOjE1OTI5NDY2MTksImV4cCI6MTU5Mjk1MDIxOX0.tk7L95BPig2Sdo9Hds_EbQQeOP1rgANlzDnTVC8AwDQ"
   /users/{id}:
+    get:
+      tags:
+        - "Users"
+      summary: "Retrieve user profile by ID"
+      description: "Returns the profile of a user based on the user ID."
+      produces:
+        - "application/json"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "User ID"
+          required: true
+          type: "integer"
+          format: "int64"
+      responses:
+        200:
+          description: "User profile retrieved successfully!"
+          schema:
+            $ref: "#/definitions/registered_user"
+        404:
+          description: "User not found!"
+        500:
+          description: "Internal Server Error!"
     put:
       tags:
         - "Users"
@@ -320,14 +343,14 @@ paths:
           description: "User profile updated successfully!"
           schema:
             $ref: "#/definitions/registered_user"
-      400:
-        description: "Invalid request parameters!"
-      403:
-        description: "Permission denied!"
-      404:
-        description: "User not found!"
-      500:
-        description: "Internal Server Error!"
+        400:
+          description: "Invalid request parameters!"
+        403:
+          description: "Permission denied!"
+        404:
+          description: "User not found!"
+        500:
+          description: "Internal Server Error!"
 definitions:
   orders:
     type: "object"
@@ -390,22 +413,30 @@ definitions:
   registered_user:
     type: "object"
     properties:
+      user_id:
+        type: "integer"
+        example: 2
       username:
         type: "string"
+        example: "john_doe"
       full_name:
         type: "string"
+        example: "John Doe"
       email:
         type: "string"
+        example: "john@example.com"
       phone_number:
-        type: "number"
-        example: 2225555
+        type: "string"
+        example: "123456789"
       address:
         type: "string"
+        example: "123 Main St"
       password:
         type: "string"
+        example: "securepassword"
       is_admin:
         type: "string"
-        example: "true"
+        example: "false"
   user_id:
     type: "object"
     properties:

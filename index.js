@@ -242,6 +242,28 @@ server.get("/users", adminAuth, async function (req, res) {
   }
 });
 
+// Retrieve user profile by ID
+server.get("/users/:id", async function (req, res) {
+  try {
+    const { id } = req.params;
+    const [user] = await sql.query(
+      `SELECT * FROM users WHERE user_id = "${id}"`
+    );
+
+    if (user.length === 0) {
+      return res.status(404).send("User not found!");
+    }
+
+    res.status(200).json(user[0]);
+  } catch (error) {
+    res
+      .status(500)
+      .send(
+        "Internal Server Error! Something went wrong while processing your request."
+      );
+  }
+});
+
 // Update user profile by ID
 server.put("/users/:id", userAuth, async function (req, res) {
   try {
@@ -498,7 +520,7 @@ server.put("/orders/:id", adminAuth, async function (req, res) {
 server.delete("/orders/:id", adminAuth, async function (req, res) {
   try {
     await sql.query(
-        `DELETE FROM orders_products WHERE order_id = "${req.params.id}"`
+      `DELETE FROM orders_products WHERE order_id = "${req.params.id}"`
     );
     const result = await sql.query(
       `DELETE FROM orders WHERE order_id = "${req.params.id}"`
